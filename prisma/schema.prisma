@@ -1,0 +1,1097 @@
+// Saanjh Studio — relational model for a multi-studio photography platform.
+// Money is stored in the smallest currency unit (paise for INR).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ───────────────────────────── Accounts ─────────────────────────────
+
+enum Role {
+  ADMIN
+  PHOTOGRAPHER
+  CLIENT
+}
+
+model Studio {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  tagline       String?
+  email         String?
+  phone         String?
+  whatsapp      String?
+  address       String?
+  city          String?
+  instagram     String?
+  youtube       String?
+  watermarkText String?
+  currency      String   @default("INR")
+  gstNumber     String?
+  invoicePrefix String   @default("INV")
+  /// default retention in days for archived galleries before manual deletion is offered
+  retentionDays Int      @default(365)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  users         User[]
+  clients       Client[]
+  packages      Package[]
+  inquiries     Inquiry[]
+  bookings      Booking[]
+  photoshoots   Photoshoot[]
+  galleries     Gallery[]
+  payments      Payment[]
+  invoices      Invoice[]
+  testimonials  Testimonial[]
+  stories       Story[]
+  portfolio     PortfolioItem[]
+  activity      ActivityLog[]
+  audit         AuditLog[]
+  storage       StorageRecord[]
+  gridTemplates GridTemplate[]
+  quotations    Quotation[]
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String
+  phone             String?
+  passwordHash      String?
+  role              Role      @default(CLIENT)
+  studioId          String?
+  studio            Studio?   @relation(fields: [studioId], references: [id], onDelete: SetNull)
+  avatarUrl         String?
+  /// { email: boolean, whatsapp: boolean, inApp: boolean, events: Record<NotificationType, boolean> }
+  notificationPrefs Json?
+  lastLoginAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  sessions          Session[]
+  authTokens        AuthToken[]
+  clientProfile     Client?          @relation("ClientUser")
+  notifications     Notification[]
+  comments          Comment[]
+  favoriteLists     FavoriteList[]
+  photoshoots       Photoshoot[]     @relation("ShootPhotographer")
+  gridDesigns       GridDesign[]
+  gridAssets        GridAsset[]
+  uploadedPhotos    Photo[]          @relation("PhotoUploader")
+  invitationsSent   Invitation[]     @relation("InvitationCreator")
+  downloads         DownloadRecord[]
+  activity          ActivityLog[]
+  audit             AuditLog[]
+
+  @@index([studioId, role])
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  userAgent  String?
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum AuthTokenPurpose {
+  ACCOUNT_SETUP
+  PASSWORD_RESET
+}
+
+model AuthToken {
+  id        String           @id @default(cuid())
+  tokenHash String           @unique
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose   AuthTokenPurpose
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime         @default(now())
+}
+
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+}
+
+// ───────────────────────────── Clients ─────────────────────────────
+
+model Client {
+  id            String    @id @default(cuid())
+  studioId      String
+  studio        Studio    @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  userId        String?   @unique
+  user          User?     @relation("ClientUser", fields: [userId], references: [id], onDelete: SetNull)
+  partner1Name  String
+  partner1Email String?
+  partner1Phone String?
+  partner2Name  String
+  partner2Email String?
+  partner2Phone String?
+  city          String?
+  weddingDate   DateTime?
+  source        String?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile       CoupleProfile?
+  bookings      Booking[]
+  photoshoots   Photoshoot[]
+  galleries     Gallery[]
+  payments      Payment[]
+  moments       LoveStoryMoment[]
+  quotations    Quotation[]
+
+  @@index([studioId, createdAt])
+  @@index([studioId, partner1Name])
+}
+
+model CoupleProfile {
+  id               String   @id @default(cuid())
+  clientId         String   @unique
+  client           Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  tagline          String?
+  story            String?
+  countdownEnabled Boolean  @default(false)
+  countdownLabel   String?
+  updatedAt        DateTime @updatedAt
+}
+
+model LoveStoryMoment {
+  id          String    @id @default(cuid())
+  clientId    String
+  client      Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title       String
+  date        DateTime?
+  description String?
+  photoId     String?
+  photo       Photo?    @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  @@index([clientId, order])
+}
+
+// ───────────────────────────── Sales ─────────────────────────────
+
+model Package {
+  id             String    @id @default(cuid())
+  studioId       String
+  studio         Studio    @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  name           String
+  slug           String
+  tagline        String?
+  description    String
+  hours          Int
+  photographers  Int       @default(1)
+  editedPhotos   Int
+  videoOption    String?
+  albumOption    String?
+  locationOption String?
+  /// price in paise. null = "price on request"
+  price          Int?
+  /// marks development sample pricing so it is never mistaken for real pricing
+  isSample       Boolean   @default(false)
+  /// [{ name: string, price: number (paise) }]
+  addOns         Json      @default("[]")
+  featured       Boolean   @default(false)
+  active         Boolean   @default(true)
+  order          Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  bookings       Booking[]
+  photoshoots    Photoshoot[]
+  inquiries      Inquiry[]
+
+  @@unique([studioId, slug])
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  CONVERTED
+  CLOSED
+}
+
+model Inquiry {
+  id            String        @id @default(cuid())
+  studioId      String
+  studio        Studio        @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  name          String
+  email         String
+  phone         String
+  partnerName   String?
+  shootType     String
+  preferredDate DateTime?
+  location      String?
+  packageId     String?
+  package       Package?      @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  budget        String?
+  message       String?
+  status        InquiryStatus @default(NEW)
+  ip            String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  quotations    Quotation[]
+  booking       Booking?
+
+  @@index([studioId, status, createdAt])
+}
+
+enum QuotationStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+}
+
+model Quotation {
+  id         String          @id @default(cuid())
+  studioId   String
+  studio     Studio          @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  inquiryId  String?
+  inquiry    Inquiry?        @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+  clientId   String?
+  client     Client?         @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  /// [{ label: string, amount: number (paise) }]
+  items      Json
+  total      Int
+  notes      String?
+  status     QuotationStatus @default(DRAFT)
+  validUntil DateTime?
+  createdAt  DateTime        @default(now())
+
+  @@index([studioId, createdAt])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  studioId      String
+  studio        Studio        @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  packageId     String?
+  package       Package?      @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  inquiryId     String?       @unique
+  inquiry       Inquiry?      @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+  title         String
+  shootType     String
+  eventDate     DateTime
+  location      String?
+  status        BookingStatus @default(PENDING)
+  /// agreed total in paise
+  totalAmount   Int
+  /// expected advance in paise
+  advanceAmount Int           @default(0)
+  notes         String?
+  reminderSentAt DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  payments      Payment[]
+  invoices      Invoice[]
+  photoshoots   Photoshoot[]
+
+  @@index([studioId, eventDate])
+  @@index([clientId])
+}
+
+enum ShootStatus {
+  INQUIRY
+  CONFIRMED
+  UPCOMING
+  IN_PROGRESS
+  EDITING
+  READY_FOR_REVIEW
+  DELIVERED
+  COMPLETED
+}
+
+model Photoshoot {
+  id             String      @id @default(cuid())
+  studioId       String
+  studio         Studio      @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  clientId       String
+  client         Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  bookingId      String?
+  booking        Booking?    @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  packageId      String?
+  package        Package?    @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  photographerId String?
+  photographer   User?       @relation("ShootPhotographer", fields: [photographerId], references: [id], onDelete: SetNull)
+  title          String
+  type           String
+  date           DateTime
+  location       String?
+  status         ShootStatus @default(CONFIRMED)
+  notes          String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  galleries      Gallery[]
+
+  @@index([studioId, date])
+  @@index([studioId, status])
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  UPI
+  CARD
+  RAZORPAY
+  OTHER
+}
+
+enum PaymentKind {
+  ADVANCE
+  BALANCE
+  FULL
+  ADDON
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  studioId          String
+  studio            Studio        @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  bookingId         String
+  booking           Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  clientId          String
+  client            Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  amount            Int
+  currency          String        @default("INR")
+  method            PaymentMethod
+  kind              PaymentKind   @default(ADVANCE)
+  status            PaymentStatus @default(PENDING)
+  reference         String?
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+  /// how the PAID status was established: "manual:<userId>" | "razorpay:signature" | "razorpay:webhook"
+  verifiedVia       String?
+  paidAt            DateTime?
+  notes             String?
+  createdAt         DateTime      @default(now())
+
+  @@index([studioId, status, createdAt])
+  @@index([bookingId])
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  VOID
+}
+
+model Invoice {
+  id        String        @id @default(cuid())
+  studioId  String
+  studio    Studio        @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  bookingId String
+  booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  number    String
+  issuedAt  DateTime      @default(now())
+  dueAt     DateTime?
+  /// [{ label: string, amount: number (paise) }]
+  items     Json
+  subtotal  Int
+  tax       Int           @default(0)
+  total     Int
+  status    InvoiceStatus @default(ISSUED)
+
+  @@unique([studioId, number])
+}
+
+// ───────────────────────────── Galleries ─────────────────────────────
+
+enum GalleryStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum GalleryVisibility {
+  /// studio, the couple, and explicitly invited guests only
+  PRIVATE
+  /// anyone holding the link AND the password
+  PASSWORD
+  /// anyone holding the link (still noindex)
+  LINK
+}
+
+model Gallery {
+  id            String            @id @default(cuid())
+  studioId      String
+  studio        Studio            @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  clientId      String?
+  client        Client?           @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  photoshootId  String?
+  photoshoot    Photoshoot?       @relation(fields: [photoshootId], references: [id], onDelete: SetNull)
+  slug          String            @unique
+  title         String
+  coupleNames   String
+  tagline       String?
+  welcomeNote   String?
+  location      String?
+  shootDate     DateTime?
+  category      String            @default("Pre-Wedding")
+  coverPhotoId  String?           @unique
+  coverPhoto    Photo?            @relation("GalleryCover", fields: [coverPhotoId], references: [id], onDelete: SetNull)
+  status        GalleryStatus     @default(DRAFT)
+  visibility    GalleryVisibility @default(PRIVATE)
+  passwordHash  String?
+  expiresAt     DateTime?
+  expiryReminderSentAt DateTime?
+  publishedAt   DateTime?
+  archivedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  settings      GallerySettings?
+  albums        Album[]
+  photos        Photo[]           @relation("GalleryPhotos")
+  favoriteLists FavoriteList[]
+  comments      Comment[]
+  invitations   Invitation[]
+  guestUploads  GuestUpload[]
+  downloads     DownloadRecord[]
+  archives      DownloadArchive[]
+  activity      ActivityLog[]
+  albumDesigns  AlbumDesign[]
+  gridDesigns   GridDesign[]
+  storage       StorageRecord[]
+
+  @@index([studioId, status])
+  @@index([clientId])
+}
+
+enum DownloadScope {
+  NONE
+  SINGLE
+  ALBUM
+  FULL
+}
+
+enum DownloadResolution {
+  WEB
+  HIGH
+}
+
+model GallerySettings {
+  id                   String             @id @default(cuid())
+  galleryId            String             @unique
+  gallery              Gallery            @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  downloadScope        DownloadScope      @default(SINGLE)
+  downloadResolution   DownloadResolution @default(WEB)
+  downloadPinHash      String?
+  downloadExpiresAt    DateTime?
+  watermarkPreviews    Boolean            @default(false)
+  allowFavorites       Boolean            @default(true)
+  allowComments        Boolean            @default(true)
+  /// anonymous LINK / PASSWORD visitors can view; downloads only if enabled here. Use SHARE_LINK invitations for richer guest permissions.
+  linkCanDownload      Boolean            @default(false)
+  guestUploadsEnabled  Boolean            @default(false)
+  guestUploadAlbumId   String?
+  guestUploadMaxFiles  Int                @default(20)
+  guestUploadMaxMb     Int                @default(25)
+  guestUploadModerated Boolean            @default(true)
+  albumSelectionLimit  Int?               @default(30)
+  socialSelectionLimit Int?               @default(10)
+  showCountdown        Boolean            @default(false)
+  countdownDate        DateTime?
+  slideshowSeconds     Int                @default(5)
+  slideshowMusicUrl    String?
+  defaultView          String             @default("masonry")
+}
+
+model Album {
+  id           String   @id @default(cuid())
+  galleryId    String
+  gallery      Gallery  @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  title        String
+  slug         String
+  description  String?
+  order        Int      @default(0)
+  hidden       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  photos       Photo[]
+
+  @@unique([galleryId, slug])
+  @@index([galleryId, order])
+}
+
+enum MediaKind {
+  IMAGE
+  VIDEO
+}
+
+enum MediaStatus {
+  PENDING
+  UPLOADED
+  PROCESSING
+  READY
+  FAILED
+}
+
+/// Photos and videos share one table (kind) so ordering, favorites, comments and downloads work uniformly.
+model Photo {
+  id            String      @id @default(cuid())
+  galleryId     String
+  gallery       Gallery     @relation("GalleryPhotos", fields: [galleryId], references: [id], onDelete: Cascade)
+  albumId       String?
+  album         Album?      @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  kind          MediaKind   @default(IMAGE)
+  filename      String
+  mimeType      String
+  size          BigInt      @default(0)
+  originalKey   String      @unique
+  /// { thumb?: key, medium?: key, large?: key, poster?: key }
+  variants      Json        @default("{}")
+  width         Int?
+  height        Int?
+  blurDataUrl   String?
+  sha256        String?
+  duplicateOfId String?
+  status        MediaStatus @default(PENDING)
+  error         String?
+  order         Int         @default(0)
+  caption       String?
+  takenAt       DateTime?
+  hidden        Boolean     @default(false)
+  uploadedById  String?
+  uploadedBy    User?       @relation("PhotoUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+  fromGuestUploadId String? @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  coverOf       Gallery?    @relation("GalleryCover")
+  favorites     Favorite[]
+  comments      Comment[]
+  downloads     DownloadRecord[]
+  moments       LoveStoryMoment[]
+  gridImages    GridDesignImage[]
+
+  @@index([galleryId, albumId, order])
+  @@index([galleryId, status])
+  @@index([galleryId, sha256])
+  @@index([galleryId, filename, size])
+}
+
+enum FavoriteListKind {
+  PERSONAL
+  ALBUM
+  SOCIAL
+  PARTNER_ONE
+  PARTNER_TWO
+  CUSTOM
+}
+
+model FavoriteList {
+  id            String           @id @default(cuid())
+  galleryId     String
+  gallery       Gallery          @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  ownerUserId   String?
+  owner         User?            @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  invitationId  String?
+  invitation    Invitation?      @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  name          String
+  kind          FavoriteListKind @default(CUSTOM)
+  /// null = unlimited
+  limit         Int?
+  shareToken    String?          @unique
+  submittedAt   DateTime?
+  createdAt     DateTime         @default(now())
+
+  favorites     Favorite[]
+
+  @@index([galleryId])
+}
+
+model Favorite {
+  id        String       @id @default(cuid())
+  listId    String
+  list      FavoriteList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  photoId   String
+  photo     Photo        @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  note      String?
+  createdAt DateTime     @default(now())
+
+  @@unique([listId, photoId])
+  @@index([photoId])
+}
+
+model Comment {
+  id            String      @id @default(cuid())
+  galleryId     String
+  gallery       Gallery     @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  photoId       String
+  photo         Photo       @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  authorUserId  String?
+  author        User?       @relation(fields: [authorUserId], references: [id], onDelete: SetNull)
+  invitationId  String?
+  invitation    Invitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  authorName    String
+  fromStudio    Boolean     @default(false)
+  parentId      String?
+  parent        Comment?    @relation("CommentThread", fields: [parentId], references: [id], onDelete: Cascade)
+  replies       Comment[]   @relation("CommentThread")
+  body          String
+  isEditRequest Boolean     @default(false)
+  resolvedAt    DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([photoId, createdAt])
+  @@index([galleryId, createdAt])
+}
+
+enum InvitationKind {
+  /// a named family member / guest invite
+  INVITE
+  /// a guest-only share link with restricted permissions
+  SHARE_LINK
+  /// QR-code portal that only allows uploads
+  UPLOAD_PORTAL
+}
+
+model Invitation {
+  id          String         @id @default(cuid())
+  galleryId   String
+  gallery     Gallery        @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  /// 192-bit random, url-safe; unguessable bearer token
+  token       String         @unique
+  kind        InvitationKind @default(INVITE)
+  name        String
+  email       String?
+  phone       String?
+  canView     Boolean        @default(true)
+  canFavorite Boolean        @default(false)
+  canComment  Boolean        @default(false)
+  canDownload Boolean        @default(false)
+  canUpload   Boolean        @default(false)
+  passwordHash String?
+  expiresAt   DateTime?
+  revokedAt   DateTime?
+  lastUsedAt  DateTime?
+  useCount    Int            @default(0)
+  createdById String?
+  createdBy   User?          @relation("InvitationCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime       @default(now())
+
+  favoriteLists FavoriteList[]
+  comments      Comment[]
+  guestUploads  GuestUpload[]
+  downloads     DownloadRecord[]
+
+  @@index([galleryId])
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model GuestUpload {
+  id           String           @id @default(cuid())
+  galleryId    String
+  gallery      Gallery          @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  invitationId String?
+  invitation   Invitation?      @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  guestName    String?
+  message      String?
+  filename     String
+  mimeType     String
+  size         BigInt
+  key          String           @unique
+  thumbKey     String?
+  status       ModerationStatus @default(PENDING)
+  ip           String?
+  reviewedAt   DateTime?
+  createdAt    DateTime         @default(now())
+
+  @@index([galleryId, status, createdAt])
+}
+
+enum ArchiveStatus {
+  QUEUED
+  PROCESSING
+  READY
+  FAILED
+  EXPIRED
+}
+
+model DownloadArchive {
+  id          String        @id @default(cuid())
+  galleryId   String
+  gallery     Gallery       @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  scope       String
+  albumId     String?
+  listId      String?
+  resolution  DownloadResolution @default(WEB)
+  status      ArchiveStatus @default(QUEUED)
+  key         String?
+  size        BigInt?
+  photoCount  Int           @default(0)
+  requestedBy String
+  error       String?
+  expiresAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([galleryId, createdAt])
+}
+
+model DownloadRecord {
+  id           String      @id @default(cuid())
+  galleryId    String
+  gallery      Gallery     @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  photoId      String?
+  photo        Photo?      @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  archiveId    String?
+  scope        String
+  resolution   String
+  photoCount   Int         @default(1)
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  invitationId String?
+  invitation   Invitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  actorLabel   String
+  ip           String?
+  createdAt    DateTime    @default(now())
+
+  @@index([galleryId, createdAt])
+}
+
+enum AlbumDesignStatus {
+  DRAFT
+  SUBMITTED
+  CHANGES_REQUESTED
+  APPROVED
+}
+
+model AlbumDesign {
+  id               String            @id @default(cuid())
+  galleryId        String
+  gallery          Gallery           @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  title            String
+  /// [{ layout: string, photoIds: string[], caption?: string }]
+  pages            Json              @default("[]")
+  status           AlbumDesignStatus @default(DRAFT)
+  coupleNote       String?
+  photographerNote String?
+  submittedAt      DateTime?
+  reviewedAt       DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([galleryId])
+}
+
+// ───────────────────────────── Marketing content ─────────────────────────────
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  studioId    String
+  studio      Studio   @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  coupleNames String
+  photoUrl    String?
+  review      String
+  rating      Int      @default(5)
+  category    String?
+  location    String?
+  published   Boolean  @default(true)
+  isSample    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Story {
+  id          String    @id @default(cuid())
+  studioId    String
+  studio      Studio    @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  slug        String    @unique
+  coupleNames String
+  title       String
+  excerpt     String
+  body        String
+  coverImage  String
+  images      String[]
+  videoUrl    String?
+  location    String
+  category    String
+  shootDate   DateTime?
+  published   Boolean   @default(true)
+  isSample    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+}
+
+model PortfolioItem {
+  id        String   @id @default(cuid())
+  studioId  String
+  studio    Studio   @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  title     String
+  category  String
+  imageUrl  String
+  width     Int
+  height    Int
+  alt       String
+  location  String?
+  featured  Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([studioId, category, order])
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String
+  body        String
+  coverImage  String
+  tags        String[]
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+// ───────────────────────────── Platform ─────────────────────────────
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String?
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  deliveries NotificationDelivery[]
+
+  @@index([userId, readAt, createdAt])
+}
+
+enum DeliveryStatus {
+  SENT
+  SKIPPED
+  FAILED
+}
+
+model NotificationDelivery {
+  id             String         @id @default(cuid())
+  notificationId String
+  notification   Notification   @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  channel        String
+  status         DeliveryStatus
+  detail         String?
+  createdAt      DateTime       @default(now())
+}
+
+model ActivityLog {
+  id           String   @id @default(cuid())
+  studioId     String
+  studio       Studio   @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  galleryId    String?
+  gallery      Gallery? @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  actorLabel   String
+  action       String
+  photoId      String?
+  meta         Json?
+  createdAt    DateTime @default(now())
+
+  @@index([studioId, createdAt])
+  @@index([galleryId, createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  studioId  String?
+  studio    Studio?  @relation(fields: [studioId], references: [id], onDelete: SetNull)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  meta      Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([studioId, createdAt])
+}
+
+enum StorageKind {
+  ORIGINAL
+  DERIVATIVE
+  ARCHIVE
+  GUEST
+  STUDIO_ASSET
+  EXPORT
+}
+
+model StorageRecord {
+  id        String      @id @default(cuid())
+  studioId  String?
+  studio    Studio?     @relation(fields: [studioId], references: [id], onDelete: SetNull)
+  galleryId String?
+  gallery   Gallery?    @relation(fields: [galleryId], references: [id], onDelete: SetNull)
+  key       String      @unique
+  bytes     BigInt
+  kind      StorageKind
+  createdAt DateTime    @default(now())
+  deletedAt DateTime?
+
+  @@index([studioId, kind])
+  @@index([galleryId])
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  type        String
+  payload     Json
+  status      JobStatus @default(QUEUED)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  runAt       DateTime  @default(now())
+  lockedAt    DateTime?
+  lastError   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, runAt])
+}
+
+// ───────────────────────────── Photo Grid Studio ─────────────────────────────
+
+model GridTemplate {
+  /// stable key, e.g. "editorial-5-a"
+  id         String   @id
+  studioId   String?
+  studio     Studio?  @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  name       String
+  categories String[]
+  style      String
+  cellCount  Int
+  width      Int
+  height     Int
+  /// full TemplateConfig (cells, defaults, decorations)
+  config     Json
+  builtin    Boolean  @default(true)
+  popularity Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  designs    GridDesign[]
+}
+
+model GridDesign {
+  id             String       @id @default(cuid())
+  ownerId        String
+  owner          User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  templateId     String
+  template       GridTemplate @relation(fields: [templateId], references: [id])
+  galleryId      String?
+  gallery        Gallery?     @relation(fields: [galleryId], references: [id], onDelete: SetNull)
+  name           String
+  /// full editor state (cells, transforms, styles, texts, decorations)
+  state          Json
+  thumbnailKey   String?
+  lastExportedAt DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  images         GridDesignImage[]
+  exports        GridExport[]
+
+  @@index([ownerId, updatedAt])
+}
+
+model GridAsset {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  key       String   @unique
+  previewKey String?
+  filename  String
+  mimeType  String
+  width     Int
+  height    Int
+  size      Int
+  createdAt DateTime @default(now())
+
+  images    GridDesignImage[]
+
+  @@index([ownerId, createdAt])
+}
+
+model GridDesignImage {
+  id        String     @id @default(cuid())
+  designId  String
+  design    GridDesign @relation(fields: [designId], references: [id], onDelete: Cascade)
+  cellIndex Int
+  photoId   String?
+  photo     Photo?     @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  assetId   String?
+  asset     GridAsset? @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  /// { x, y, zoom, rotate, flipX, flipY, fit }
+  transform Json
+
+  @@unique([designId, cellIndex])
+}
+
+model GridExport {
+  id        String     @id @default(cuid())
+  designId  String
+  design    GridDesign @relation(fields: [designId], references: [id], onDelete: Cascade)
+  format    String
+  width     Int
+  height    Int
+  key       String
+  size      Int
+  createdAt DateTime   @default(now())
+
+  @@index([designId, createdAt])
+}
