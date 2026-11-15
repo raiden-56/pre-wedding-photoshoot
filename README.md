@@ -1,6 +1,8 @@
 # Saanjh Studio — Pre-Wedding & Wedding Photography Platform
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Prisma + PostgreSQL · Motion · GSAP · React Three Fiber.
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Prisma + PostgreSQL · Motion · GSAP · Lenis · Motion Primitives · React Three Fiber.
+
+Design tooling: the [unslop](https://github.com/heydamir/unslop) Claude Code plugin is enabled for this project in `.claude/settings.json` (run `/unslop` on a screen). Motion and layout guidelines, referenced from [motionsites.ai](https://motionsites.ai/), are in [docs/motion-reference.md](docs/motion-reference.md).
 
 > **Work in progress.** Public website, auth, database, upload pipeline, background jobs and most of the photographer dashboard are built. The admin gallery detail workspace, couple-facing gallery pages, couple dashboard and the Photo Grid Studio UI are still to come (their server actions, access control and template engine already exist).
 

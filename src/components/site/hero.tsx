@@ -6,6 +6,9 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { photo } from "@/content/photos";
+import { TextLoop } from "@/components/motion/text-loop";
+import { Magnetic } from "@/components/motion/magnetic";
+import { ProgressiveBlur } from "@/components/motion/progressive-blur";
 
 const words = ["Every", "Love", "Story", "Deserves", "Its", "Own", "Frame."];
 
@@ -38,7 +41,8 @@ export function HomeHero() {
           <Image src={main.src} alt={main.alt} fill priority sizes="100vw" quality={85} className="object-cover object-[50%_60%]" />
         </motion.div>
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/45 via-charcoal/10 to-charcoal/75" />
+      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/45 via-charcoal/5 to-charcoal/55" />
+      <ProgressiveBlur direction="bottom" blurIntensity={0.6} blurLayers={8} className="pointer-events-none absolute inset-x-0 bottom-0 h-[38%]" />
 
       {/* layer 2 — floating prints for depth */}
       <motion.div
@@ -67,9 +71,14 @@ export function HomeHero() {
 
       {/* layer 3 — typography */}
       <motion.div style={{ y: textY, opacity: fade }} className="container-x relative z-10 flex h-full flex-col justify-end pb-24 sm:justify-center sm:pb-0">
-        <motion.p initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="eyebrow mb-6 text-champagne">
-          Pre-wedding &amp; wedding photography · India &amp; beyond
-        </motion.p>
+        <motion.div initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="eyebrow mb-6 flex flex-wrap items-center gap-x-2 text-champagne">
+          <span>Pre-wedding &amp; wedding photography ·</span>
+          <TextLoop interval={2.6} className="min-w-[7rem]">
+            {["Goa", "Udaipur", "Kerala", "Jaipur", "Coorg", "The Himalayas"].map((l) => (
+              <span key={l}>{l}</span>
+            ))}
+          </TextLoop>
+        </motion.div>
         <h1 className="font-display max-w-[14ch] text-display">
           {words.map((w, i) => (
             <span key={i} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-top">
@@ -93,12 +102,16 @@ export function HomeHero() {
           Beautifully captured moments, thoughtfully curated memories, and stories that stay with you forever.
         </motion.p>
         <motion.div initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.9, duration: 0.9 }} className="mt-10 flex flex-wrap gap-3">
-          <Link href="/stories" className="group inline-flex h-12 items-center gap-2 bg-ivory px-7 text-[12px] font-medium uppercase tracking-[0.18em] text-charcoal transition hover:bg-champagne">
-            Explore Our Stories <ArrowRight className="size-4 transition group-hover:translate-x-1" />
-          </Link>
-          <Link href="/contact" className="inline-flex h-12 items-center border border-ivory/60 px-7 text-[12px] font-medium uppercase tracking-[0.18em] transition hover:bg-ivory hover:text-charcoal">
-            Book Your Photoshoot
-          </Link>
+          <Magnetic intensity={0.25} range={120}>
+            <Link href="/stories" className="group inline-flex h-12 items-center gap-2 bg-ivory px-7 text-[12px] font-medium uppercase tracking-[0.18em] text-charcoal transition-colors hover:bg-champagne">
+              Explore Our Stories <ArrowRight className="size-4 transition group-hover:translate-x-1" />
+            </Link>
+          </Magnetic>
+          <Magnetic intensity={0.25} range={120}>
+            <Link href="/contact" className="inline-flex h-12 items-center border border-ivory/60 px-7 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors hover:bg-ivory hover:text-charcoal">
+              Book Your Photoshoot
+            </Link>
+          </Magnetic>
         </motion.div>
       </motion.div>
 

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { HomeHero } from "@/components/site/hero";
+import { PhotoMarquee } from "@/components/site/photo-marquee";
 import { FrameShowcase } from "@/components/site/frame-showcase";
 import { PortfolioGallery } from "@/components/site/portfolio-gallery";
 import { ProcessTimeline } from "@/components/site/process-timeline";
@@ -67,6 +68,10 @@ export default async function HomePage() {
             <Image src={intro[2].src} alt={intro[2].alt} fill sizes="16vw" className="object-cover" />
           </ImageReveal>
         </div>
+      </section>
+
+      <section className="pb-24 sm:pb-32">
+        <PhotoMarquee rows={[["34", "09", "27", "23", "16", "50", "39", "47", "30"], ["21", "41", "14", "36", "29", "19", "45", "31", "12"]]} />
       </section>
 
       {/* Featured photography */}
