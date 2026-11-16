@@ -8,6 +8,7 @@ import { FormError } from "@/components/ui/form";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { toast } from "@/components/ui/toaster";
 import type { ActionResult } from "@/lib/utils";
+import { DEMO, DEMO_MESSAGE } from "@/lib/demo";
 
 export type FormAction = (prev: ActionResult<unknown> | undefined, formData: FormData) => Promise<ActionResult<unknown>>;
 
@@ -117,6 +118,7 @@ export function ActionButton({
       {...props}
       disabled={pending || props.disabled}
       onClick={async () => {
+        if (DEMO) return toast.info("Demo mode", DEMO_MESSAGE);
         if (confirm && !window.confirm(confirm)) return;
         setPending(true);
         try {

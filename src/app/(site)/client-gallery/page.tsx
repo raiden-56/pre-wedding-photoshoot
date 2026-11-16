@@ -4,6 +4,7 @@ import Link from "next/link";
 import { KeyRound, Link2, LogIn } from "lucide-react";
 import { photo } from "@/content/photos";
 import { GalleryLinkForm } from "./link-form";
+import { GuestMode } from "@/components/demo/guest-mode";
 
 export const metadata: Metadata = { title: "Client Gallery", description: "Open your private gallery.", robots: { index: false } };
 
@@ -15,6 +16,7 @@ export default function ClientGalleryPage() {
         <p className="eyebrow mb-5">Client gallery</p>
         <h1 className="font-display text-headline">Your photographs are waiting.</h1>
         <div className="mt-10 space-y-6">
+          <GuestMode />
           <div className="border border-line bg-white p-6">
             <LogIn className="size-5 text-olive" />
             <h2 className="font-display mt-3 text-2xl">Couples</h2>

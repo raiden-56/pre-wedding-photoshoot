@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { LogOut } from "lucide-react";
 import { requireClientPage } from "@/lib/auth/session";
-import { logoutAction } from "@/server/actions/auth";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import { Logo } from "@/components/ui/misc";
 import { DashboardNav } from "./nav";
 
@@ -18,11 +17,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <span className="hidden text-muted sm:inline">{user.name}</span>
-            <form action={logoutAction}>
-              <button className="inline-flex items-center gap-1.5 text-ink transition-colors duration-150 hover:text-charcoal">
-                <LogOut className="size-4" /> Sign out
-              </button>
-            </form>
+            <SignOutButton />
           </div>
         </div>
         <div className="container-x">

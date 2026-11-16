@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { RegisterForm } from "@/components/auth/forms";
 import { db } from "@/lib/db";
+import { GuestMode } from "@/components/demo/guest-mode";
 
 export const metadata: Metadata = { title: "Create a studio account", robots: { index: false } };
 
@@ -11,6 +12,7 @@ export default async function RegisterPage() {
     <>
       <p className="eyebrow mb-3">For photographers</p>
       <h1 className="font-display text-5xl">Create your studio</h1>
+      <GuestMode className="mt-6" compact />
       {open ? (
         <>
           <p className="mb-8 mt-3 text-sm text-muted">Manage clients, shoots, private galleries, selections, payments and deliveries in one place.</p>

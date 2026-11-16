@@ -41,7 +41,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         description={[client.city, client.source && `via ${client.source}`].filter(Boolean).join(" · ")}
         actions={
           <>
-            <ClientDialog client={client} trigger={<Button variant="outline"><Pencil /> Edit</Button>} />
+            <ClientDialog client={{ id: client.id, partner1Name: client.partner1Name, partner1Email: client.partner1Email, partner1Phone: client.partner1Phone, partner2Name: client.partner2Name, partner2Email: client.partner2Email, partner2Phone: client.partner2Phone, city: client.city, weddingDate: client.weddingDate, source: client.source, notes: client.notes }} trigger={<Button variant="outline"><Pencil /> Edit</Button>} />
             {user.role === "ADMIN" && <ActionButton variant="ghost" action={deleteClient.bind(null, client.id)} confirm="Delete this client? Bookings and payments will be removed. Galleries must be archived first.">Delete</ActionButton>}
           </>
         }

@@ -34,3 +34,15 @@ Development logins are listed at the top of `prisma/seed.ts`.
 ## Sample content
 
 Photographs are CC0 works (originally Unsplash, via Wikimedia Commons) — credits in `prisma/photo-credits.json` and at `/credits`. Couples, testimonials, stories and prices are fictional and flagged as samples in the UI.
+
+## Static demo (GitHub Pages)
+
+A read-only demo of the whole app — public site, studio dashboard, couple dashboard, private galleries and Grid Studio — runs on GitHub Pages without a backend. Sign-in screens offer **Continue as a guest** instead of a login form, and every page shows the seeded sample data captured at build time. Anything that would change data shows a “read-only demo” notice.
+
+```bash
+npm run db:local       # the sample database must be running while building
+npm run build:demo     # → demo-out/ (served from /pre-wedding-photoshoot/)
+npm run deploy:demo    # force-pushes demo-out/ to the gh-pages branch
+```
+
+`scripts/build-demo.mjs` never touches `src/`: it copies the project to `.demo-build/`, swaps in demo stand-ins from `scripts/demo/overrides` (no sessions, read-only actions, static media URLs), pre-renders every route and copies the gallery photographs in as static files. Guest mode only appears in this build (`NEXT_PUBLIC_DEMO=1`); the real app keeps normal sign-in.

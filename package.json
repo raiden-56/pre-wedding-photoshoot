@@ -12,7 +12,9 @@
     "db:seed": "tsx --env-file=.env --conditions=react-server prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && tsx --env-file=.env --conditions=react-server prisma/seed.ts",
     "worker": "tsx --env-file=.env --conditions=react-server scripts/worker.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "build:demo": "node scripts/build-demo.mjs",
+    "deploy:demo": "node scripts/deploy-demo.mjs"
   },
   "prisma": {
     "seed": "tsx --env-file=.env --conditions=react-server prisma/seed.ts"

@@ -1,16 +1,19 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, ExternalLink, Heart, Images, MessageSquare, UserPlus, Users } from "lucide-react";
 import { db } from "@/lib/db";
 import { requireStaffPage } from "@/lib/auth/session";
 import { mediaUrl } from "@/lib/media";
-import { cn, formatDate, timeAgo, toInputDate } from "@/lib/utils";
+import { formatDate, timeAgo, toInputDate } from "@/lib/utils";
+import { DEMO } from "@/lib/demo";
 import { ACTIVITY_LABELS } from "@/server/activity";
 import { StatusBadge } from "@/components/admin/status";
 import { Badge, EmptyState, Panel } from "@/components/ui/misc";
 import { Button } from "@/components/ui/button";
 import { ShareDialog } from "@/components/gallery/share-dialog";
 import { PhotosManager } from "./photos-manager";
+import { ClientTabs, TabNav } from "./client-tabs";
 import { AlbumDesignReview, CommentThread, CopyFilenames, DangerZone, DetailsForm, GuestModeration, SettingsForm, StatusActions } from "./panels";
 
 const TABS = [
@@ -55,6 +58,30 @@ export default async function GalleryAdminPage({ params, searchParams }: { param
 
   const cover = gallery.coverPhotoId ? mediaUrl("p", gallery.coverPhotoId, "large") : null;
   const counts: Partial<Record<Tab, number>> = { comments: openComments, guests: pendingGuests, selections: submitted };
+
+  const tabDefs = TABS.map(([t, label]) => ({ id: t, label, count: counts[t] }));
+  const pane = async (t: Tab) => {
+    switch (t) {
+      case "photos":
+        return <PhotosTab galleryId={gallery.id} coverId={gallery.coverPhotoId} albums={gallery.albums.map((a) => ({ id: a.id, title: a.title, description: a.description, count: a._count.photos }))} />;
+      case "selections":
+        return <SelectionsTab galleryId={gallery.id} />;
+      case "comments":
+        return <CommentsTab galleryId={gallery.id} />;
+      case "guests":
+        return <GuestsTab galleryId={gallery.id} enabled={!!gallery.settings?.guestUploadsEnabled} />;
+      case "albums":
+        return <AlbumDesignsTab galleryId={gallery.id} />;
+      case "sharing":
+        return <SharingTab gallery={gallery} />;
+      case "settings": {
+        const clients = await db.client.findMany({ where: { studioId: user.studioId }, select: { id: true, partner1Name: true, partner2Name: true } });
+        return <SettingsTab gallery={gallery} clients={clients.map((c) => ({ id: c.id, name: `${c.partner1Name} & ${c.partner2Name}` }))} isAdmin={user.role === "ADMIN"} />;
+      }
+      case "activity":
+        return <ActivityTab galleryId={gallery.id} />;
+    }
+  };
 
   return (
     <div className="-mt-2">
@@ -116,30 +143,17 @@ export default async function GalleryAdminPage({ params, searchParams }: { param
         ))}
       </div>
 
-      {/* tabs */}
-      <nav className="no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b border-line" aria-label="Gallery sections">
-        {TABS.map(([t, label]) => (
-          <Link key={t} href={`?tab=${t}`} scroll={false} className={cn("relative -mb-px flex shrink-0 items-center gap-1.5 border-b-2 px-3.5 py-2.5 text-[13px] transition", tab === t ? "border-charcoal text-charcoal" : "border-transparent text-muted hover:text-charcoal")}>
-            {label}
-            {!!counts[t] && <span className="rounded-full bg-olive px-1.5 text-[10px] text-white">{counts[t]}</span>}
-          </Link>
-        ))}
-      </nav>
-
-      {tab === "photos" && <PhotosTab galleryId={gallery.id} coverId={gallery.coverPhotoId} albums={gallery.albums.map((a) => ({ id: a.id, title: a.title, description: a.description, count: a._count.photos }))} />}
-      {tab === "selections" && <SelectionsTab galleryId={gallery.id} />}
-      {tab === "comments" && <CommentsTab galleryId={gallery.id} />}
-      {tab === "guests" && <GuestsTab galleryId={gallery.id} enabled={!!gallery.settings?.guestUploadsEnabled} />}
-      {tab === "albums" && <AlbumDesignsTab galleryId={gallery.id} />}
-      {tab === "sharing" && <SharingTab gallery={gallery} />}
-      {tab === "settings" && (
-        <SettingsTab
-          gallery={gallery}
-          clients={(await db.client.findMany({ where: { studioId: user.studioId }, select: { id: true, partner1Name: true, partner2Name: true } })).map((c) => ({ id: c.id, name: `${c.partner1Name} & ${c.partner2Name}` }))}
-          isAdmin={user.role === "ADMIN"}
-        />
+      {/* tabs: rendered on the server per request; the static demo renders every pane and switches in the browser */}
+      {DEMO ? (
+        <Suspense fallback={<TabNav tabs={tabDefs} active="photos" />}>
+          <ClientTabs tabs={tabDefs} panes={Object.fromEntries(await Promise.all(TABS.map(async ([t]) => [t, await pane(t)] as const)))} />
+        </Suspense>
+      ) : (
+        <>
+          <TabNav tabs={tabDefs} active={tab} />
+          {await pane(tab)}
+        </>
       )}
-      {tab === "activity" && <ActivityTab galleryId={gallery.id} />}
     </div>
   );
 }
