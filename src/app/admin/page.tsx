@@ -75,10 +75,10 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
 
       <div className="mt-6 grid gap-6 xl:grid-cols-3">
         <Panel title="Revenue — verified payments, last 6 months" className="xl:col-span-2">
-          <BarChart title="Monthly revenue" data={revenue} format={(n) => (n >= 1e7 ? `₹${(n / 1e7).toFixed(1)}L` : formatMoney(n).replace(/\.00$/, ""))} />
+          <BarChart title="Monthly revenue" data={revenue} format="money" />
         </Panel>
         <Panel title="New bookings per month">
-          <BarChart title="Bookings per month" data={bookingSeries} format={(n) => String(Math.round(n))} />
+          <BarChart title="Bookings per month" data={bookingSeries} format="count" />
         </Panel>
       </div>
 

@@ -37,11 +37,11 @@ export function PortfolioGallery({ items, categories, initial = "All", feature =
 
       {feature && hero && (
         <motion.button layout onClick={() => setOpen(0)} className="group relative mb-3 block aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9]" aria-label={`Open ${hero.alt}`}>
-          <Image src={hero.src} alt={hero.alt} fill sizes="100vw" className="object-cover transition duration-[1.6s] ease-out group-hover:scale-[1.03]" />
+          <Image src={hero.src} alt={hero.alt} fill sizes="100vw" quality={85} className="object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal/50 to-transparent opacity-80" />
           <span className="absolute bottom-5 left-5 text-left text-ivory">
-            <span className="eyebrow block text-champagne">{hero.category}</span>
-            <span className="font-display text-2xl sm:text-3xl">{hero.location}</span>
+            <span className="block text-xs text-ivory/80">{hero.category}</span>
+            <span className="font-display text-xl sm:text-2xl">{hero.location}</span>
           </span>
         </motion.button>
       )}
@@ -63,9 +63,9 @@ export function PortfolioGallery({ items, categories, initial = "All", feature =
                 style={{ aspectRatio: `${it.width} / ${it.height}` }}
                 aria-label={`Open ${it.alt}`}
               >
-                <Image src={it.src} alt={it.alt} fill sizes="(min-width:1280px) 25vw, (min-width:768px) 33vw, 50vw" className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+                <Image src={it.src} alt={it.alt} fill sizes="(min-width:1280px) 25vw, (min-width:768px) 33vw, 50vw" quality={85} className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
                 <span className="absolute inset-0 bg-charcoal/0 transition duration-500 group-hover:bg-charcoal/25" />
-                <span className="absolute bottom-3 left-3 translate-y-2 text-left text-[11px] uppercase tracking-[0.2em] text-ivory opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="absolute bottom-3 left-3 text-left text-xs text-ivory opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                   {it.location ?? it.category}
                 </span>
               </motion.button>

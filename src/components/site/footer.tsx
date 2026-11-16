@@ -11,10 +11,10 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="bg-charcoal text-ivory">
-      <div className="container-x grid gap-14 py-20 lg:grid-cols-12">
+      <div className="container-x grid gap-12 py-16 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo light />
-          <p className="font-display mt-8 max-w-sm text-3xl leading-tight text-ivory/90">Every love story deserves its own frame.</p>
+          <p className="font-display mt-6 max-w-sm text-2xl leading-tight text-ivory/90">Every love story deserves its own frame.</p>
           <div className="mt-8 flex gap-3">
             {[
               { href: studio?.instagram ?? "#", label: "Instagram", Icon: InstagramIcon },

@@ -8,15 +8,21 @@ ivory / champagne / charcoal / olive, with no neon, glow or purple gradients.
 
 | Pattern seen on motionsites | Where we use it | Implementation |
 |---|---|---|
-| Weighted smooth scrolling | Whole public site | `lenis` via `components/site/smooth-scroll.tsx` (synced with GSAP ScrollTrigger; off for reduced motion) |
-| Oversized display type with staggered word reveal | Home hero | Motion, `components/site/hero.tsx` |
-| Rotating keyword in the hero line | Hero eyebrow (locations) | Motion Primitives `TextLoop` |
-| Magnetic CTAs | Hero buttons | Motion Primitives `Magnetic` |
-| Soft progressive blur instead of heavy gradient scrims | Bottom of hero image | Motion Primitives `ProgressiveBlur` |
-| Endless image strips / marquees | Home, below the intro | Motion Primitives `InfiniteSlider` (`components/site/photo-marquee.tsx`) |
-| Scroll-pinned 3D object handing off to a real image | “The frame” section | React Three Fiber, `frame-showcase.tsx` |
-| Scroll-scrubbed timeline with sticky media | Our process | GSAP ScrollTrigger, `process-timeline.tsx` |
+| Weighted smooth scrolling | Whole public site | `lenis` via `components/site/smooth-scroll.tsx` (off for reduced motion) |
+| Cross-fading slideshow with slow zoom + progress bars | Home hero | Motion, `components/site/hero.tsx` (all slides preloaded; pauses when the tab is hidden) |
+| Scroll turns the full-bleed photo into a matted, framed print | Home hero → “Every love story deserves its own frame” | `useScroll` → animated `clip-path` on the photo and a white mat |
+| Word-by-word headline rise | Home hero | Motion, masked spans |
+| Rules that draw in as each step arrives | Our process | `whileInView` + `scaleX` (`process-timeline.tsx`) |
+| Expanding photo strip | Where we shoot (desktop) | `flex-grow` transition, details fade in (`locations-strip.tsx`) |
 | In-view reveals | Section headings & images | `Reveal` / `ImageReveal` or Motion Primitives `InView` |
+| Clip-path cover reveal + per-letter title | Couple gallery cover, gates | Motion + Motion Primitives `TextEffect` (`components/gallery/landing.tsx`, `gate.tsx`) |
+| Rolling digits | Wedding countdown | Motion Primitives `SlidingNumber` |
+| Sliding pill behind the active tab | Gallery album nav, Grid Studio categories | Motion Primitives `AnimatedBackground` |
+| Tilt-on-hover cards | Album chapters, Grid Studio hero | Motion Primitives `Tilt` |
+| Self-drawing timeline line | Love-story timeline | `useScroll` → `scaleY` |
+| Ken Burns crossfade | Gallery slideshow | Motion (`components/gallery/slideshow.tsx`) |
+| Fanned, floating prints | Grid Studio hero | Live template previews + `Tilt` (`components/grid/hero-stack.tsx`) |
+| Blur-crossfade panels | Grid Studio tool panels | Motion Primitives `TransitionPanel` |
 
 ## Libraries
 
@@ -26,6 +32,10 @@ ivory / champagne / charcoal / olive, with no neon, glow or purple gradients.
 - **Motion Primitives** (`components/motion/*`, installed through the shadcn registry in `components.json`).
   Add more with `npx shadcn@latest add @motion-primitives/<name>`.
 - **@react-three/fiber** + three — the single purposeful WebGL moment.
+
+## Homepage (unslop pass)
+
+The homepage was unslopped for a calmer, more professional first screen: the hero fits one viewport with a single photograph, display type was reduced (hero 40–56px, section titles 30–42px), labels are sentence case, and looping or scroll-jacked effects were removed (marquee, parallax, magnetic buttons, the scroll-pinned 3D frame and the GSAP process timeline). `gsap`, `three` and `@react-three/fiber` are no longer imported anywhere.
 
 ## Rules
 

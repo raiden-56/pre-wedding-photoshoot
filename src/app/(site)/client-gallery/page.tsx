@@ -19,7 +19,7 @@ export default function ClientGalleryPage() {
             <LogIn className="size-5 text-olive" />
             <h2 className="font-display mt-3 text-2xl">Couples</h2>
             <p className="mt-1 text-sm text-muted">Sign in to see every gallery, favourite list, booking and delivery update.</p>
-            <Link href="/login?next=/dashboard/galleries" className="mt-4 inline-flex h-10 items-center bg-charcoal px-5 text-xs uppercase tracking-[0.18em] text-ivory">
+            <Link href="/login?next=/dashboard/galleries" className="mt-4 inline-flex h-10 items-center bg-charcoal px-5 text-sm font-medium text-ivory">
               Sign in
             </Link>
           </div>

@@ -21,10 +21,10 @@
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
 
-  --text-display: clamp(3.25rem, 8.5vw, 8.75rem);
-  --text-display--line-height: 0.92;
-  --text-headline: clamp(2.4rem, 5vw, 4.75rem);
-  --text-headline--line-height: 1;
+  --text-display: clamp(2.5rem, 4.8vw, 3.75rem);
+  --text-display--line-height: 1.05;
+  --text-headline: clamp(1.875rem, 3vw, 2.625rem);
+  --text-headline--line-height: 1.12;
 
   --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade-up: fade-up 0.9s var(--ease-cinematic) both;
@@ -41,6 +41,12 @@
 }
 
 @layer base {
+  /* Browser extensions sometimes inject Bootstrap-style toast containers (".toast-container.position-fixed").
+     Bootstrap CSS isn't loaded here, so keep them out of the page flow instead of adding space after the footer. */
+  body > .toast-container,
+  body > .position-fixed {
+    position: fixed;
+  }
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -73,10 +79,10 @@
 @layer components {
   .eyebrow {
     font-family: var(--font-sans);
-    font-size: 0.68rem;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    color: var(--color-olive);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-olive-deep);
   }
   .font-display {
     font-family: var(--font-serif);

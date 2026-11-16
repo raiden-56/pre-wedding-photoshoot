@@ -42,7 +42,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         actions={
           <>
             <ClientDialog client={client} trigger={<Button variant="outline"><Pencil /> Edit</Button>} />
-            {user.role === "ADMIN" && <ActionButton variant="ghost" action={() => deleteClient(client.id)} confirm="Delete this client? Bookings and payments will be removed. Galleries must be archived first.">Delete</ActionButton>}
+            {user.role === "ADMIN" && <ActionButton variant="ghost" action={deleteClient.bind(null, client.id)} confirm="Delete this client? Bookings and payments will be removed. Galleries must be archived first.">Delete</ActionButton>}
           </>
         }
       />

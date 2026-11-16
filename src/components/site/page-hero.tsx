@@ -28,13 +28,13 @@ export function PageHero({ eyebrow, title, intro, photoId, align = "bottom" }: {
 export function SectionHeading({ eyebrow, title, intro, className }: { eyebrow: string; title: React.ReactNode; intro?: string; className?: string }) {
   return (
     <div className={className}>
-      <p className="eyebrow mb-4">{eyebrow}</p>
+      <p className="eyebrow mb-3">{eyebrow}</p>
       <h2 className="font-display text-headline">{title}</h2>
-      {intro && <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted">{intro}</p>}
+      {intro && <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink/80">{intro}</p>}
     </div>
   );
 }
 
 export function SampleNote({ children = "Illustrative sample content for development" }: { children?: React.ReactNode }) {
-  return <p className="mt-3 inline-block border border-dashed border-taupe px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-muted">{children}</p>;
+  return <p className="mt-3 inline-block border border-dashed border-taupe px-2 py-0.5 text-xs text-muted">{children}</p>;
 }

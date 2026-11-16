@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatMoney } from "@/lib/utils";
 
 type Datum = { label: string; value: number; hint?: string };
 
@@ -9,7 +10,14 @@ type Datum = { label: string; value: number; hint?: string };
  * baseline, recessive grid, per-bar hover tooltip and an sr-only table view.
  * One series → no legend; the panel title names it.
  */
-export function BarChart({ data, format, height = 200, title }: { data: Datum[]; format: (n: number) => string; height?: number; title: string }) {
+/** Formatters live here (not in props) because server pages can’t pass functions to client components. */
+const FORMATS = {
+  money: (n: number) => (n >= 1e7 ? `₹${(n / 1e7).toFixed(1)}L` : formatMoney(n).replace(/\.00$/, "")),
+  count: (n: number) => String(Math.round(n)),
+} as const;
+
+export function BarChart({ data, format: kind, height = 200, title }: { data: Datum[]; format: keyof typeof FORMATS; height?: number; title: string }) {
+  const format = FORMATS[kind];
   const [hover, setHover] = useState<number | null>(null);
   const max = Math.max(1, ...data.map((d) => d.value));
   const nice = niceMax(max);

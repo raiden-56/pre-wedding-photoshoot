@@ -110,7 +110,8 @@ export type CellTransform = {
 export type CellFilters = { brightness: number; contrast: number; saturation: number; warmth: number };
 
 export type ImageRef = {
-  source: "asset" | "photo";
+  /** photo = gallery photo, asset = uploaded to the user’s account, sample = public demo image, local = device file not uploaded */
+  source: "asset" | "photo" | "sample" | "local";
   id: string;
   /** preview-quality URL for the editor */
   src: string;

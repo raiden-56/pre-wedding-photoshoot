@@ -13,7 +13,7 @@ import { mediaUrl, validateMedia, extFromName } from "@/lib/media";
 import { uploadTarget } from "@/lib/storage";
 import { commentSchema } from "@/lib/validation";
 import type { ActionResult } from "@/lib/utils";
-import { favoriteOwner, GalleryAccessError, passwordCookie, passwordFingerprint, pinCookie, requireGalleryPerm, resolveGalleryAccess } from "@/server/gallery-access";
+import { favoriteOwner, GalleryAccessError, invitationCookie, passwordCookie, passwordFingerprint, pinCookie, requireGalleryPerm, resolveGalleryAccess } from "@/server/gallery-access";
 import { logActivity } from "@/server/activity";
 import { enqueue } from "@/server/jobs";
 import { notify, notifyStudio, sendEmail } from "@/server/notify";
@@ -86,7 +86,7 @@ export async function toggleFavorite(slug: string, photoId: string, listId?: str
   }
 }
 
-export async function createFavoriteList(slug: string, name: string, kind: FavoriteListKind): Promise<R<{ id: string }>> {
+export async function createFavoriteList(slug: string, name: string, kind: FavoriteListKind): Promise<R<{ id: string; limit: number | null }>> {
   try {
     const access = await requireGalleryPerm({ slug }, "favorite");
     const owner = favoriteOwner(access);
@@ -97,7 +97,7 @@ export async function createFavoriteList(slug: string, name: string, kind: Favor
     const count = await db.favoriteList.count({ where: { galleryId: access.gallery.id, ...owner } });
     if (count >= 20) return { ok: false, error: "You can have up to 20 lists" };
     const list = await db.favoriteList.create({ data: { galleryId: access.gallery.id, name: clean, kind, limit, ...owner } });
-    return { ok: true, data: { id: list.id }, message: "List created" };
+    return { ok: true, data: { id: list.id, limit: list.limit }, message: "List created" };
   } catch (e) {
     return fail(e);
   }
@@ -464,6 +464,26 @@ export async function saveAlbumDesign(slug: string, input: { id?: string; title:
       await notifyStudio(access.gallery.studioId, { type: "ALBUM_DESIGN", title: `Album design submitted: “${data.title}”`, body: access.gallery.title, link: `/admin/galleries/${access.gallery.id}?tab=albums` });
     }
     return { ok: true, data: { id }, message: input.submit ? "Submitted for the studio’s approval" : "Draft saved" };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+// ───────────── Invitation entry ─────────────
+
+/** Exchanges an invitation token (plus its password, if any) for a signed access cookie. */
+export async function acceptInvitation(token: string, password?: string): Promise<R<{ slug: string }>> {
+  try {
+    const ip = clientIp(await headers());
+    if (!(await rateLimit(`invite:${ip}`, 20, 900))) return { ok: false, error: "Too many attempts. Please wait 15 minutes." };
+    const inv = await db.invitation.findUnique({ where: { token }, include: { gallery: { select: { id: true, slug: true, status: true } } } });
+    if (!inv || inv.revokedAt || (inv.expiresAt && inv.expiresAt < new Date())) return { ok: false, error: "This invitation is no longer active." };
+    if (inv.gallery.status !== "PUBLISHED") return { ok: false, error: "This gallery isn’t open yet." };
+    if (inv.kind === "UPLOAD_PORTAL") return { ok: false, error: "This link is for sharing photographs only." };
+    if (inv.passwordHash && !(password && (await verifyPassword(password, inv.passwordHash)))) return { ok: false, error: "That password isn’t right." };
+    (await cookies()).set(invitationCookie(inv.gallery.id), signValue(inv.id), cookieOpts);
+    await db.invitation.update({ where: { id: inv.id }, data: { useCount: { increment: 1 }, lastUsedAt: new Date() } });
+    return { ok: true, data: { slug: inv.gallery.slug } };
   } catch (e) {
     return fail(e);
   }

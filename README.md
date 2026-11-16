@@ -4,7 +4,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Prisma + 
 
 Design tooling: the [unslop](https://github.com/heydamir/unslop) Claude Code plugin is enabled for this project in `.claude/settings.json` (run `/unslop` on a screen). Motion and layout guidelines, referenced from [motionsites.ai](https://motionsites.ai/), are in [docs/motion-reference.md](docs/motion-reference.md).
 
-> **Work in progress.** Public website, auth, database, upload pipeline, background jobs and most of the photographer dashboard are built. The admin gallery detail workspace, couple-facing gallery pages, couple dashboard and the Photo Grid Studio UI are still to come (their server actions, access control and template engine already exist).
+> **Work in progress.** Public website, auth, database, upload pipeline, background jobs, the photographer dashboard (including the gallery workspace), couple galleries, guest invitations and uploads, and Photo Grid Studio are built. Still to come: the couple dashboard (`/dashboard`), the album designer UI, and a few admin list pages (uploads, payments, packages, testimonials, notifications, settings).
 
 ## Quick start
 
@@ -26,7 +26,10 @@ Development logins are listed at the top of `prisma/seed.ts`.
 - **Private media** — originals stored outside `public/`, served only via HMAC-signed expiring URLs; S3-compatible driver with presigned uploads; sharp derivatives (thumb/medium/large WebP), lazy watermarking.
 - **Uploads** — signed upload tickets, streamed to storage (no buffering), per-file progress, 3-way concurrency, pause/resume, retry, cancel, duplicate detection, background processing via a PostgreSQL job queue.
 - **Dashboard** — overview with revenue/booking charts, clients, photoshoots (list + calendar), inquiries → quotations → bookings, payments (manual + Razorpay with server-side verification and signed webhook), invoices.
-- **Photo Grid Studio engine** — 32 data-driven templates, shared layout math for editor and exporter, Smart Auto Layout.
+- **Couple galleries** (`/gallery/[slug]`) — cinematic cover, countdown, album chapters, love-story timeline, justified photo grid, lightbox with favourites / comments / edit requests / downloads (PIN + ZIP), selection lists with limits and submit-to-studio, family sharing with QR codes, Ken Burns slideshow, guest uploads.
+- **Invitations** (`/guest/[token]`) — personal invitation entry (optional password) and QR upload portals for wedding guests.
+- **Gallery workspace** (`/admin/galleries/[id]`) — albums, uploads, multi-select bulk actions, selections with “copy filenames”, comment replies, guest-upload moderation, album-design review, sharing, settings, guarded deletion, activity.
+- **Photo Grid Studio** (`/grid-studio`) — 32 data-driven templates, drag-and-drop editor (reframe, zoom, straighten, filters, text, style, undo/redo), Smart Auto Layout, PNG / JPG / PDF export from the same layout math as the editor, saved designs and gallery photos for signed-in users.
 
 ## Sample content
 

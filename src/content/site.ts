@@ -3,6 +3,7 @@ export const NAV_LINKS = [
   { href: "/portfolio", label: "Our Work" },
   { href: "/pre-wedding", label: "Pre-Wedding" },
   { href: "/wedding", label: "Wedding" },
+  { href: "/poses", label: "Poses" },
   { href: "/stories", label: "Stories" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
