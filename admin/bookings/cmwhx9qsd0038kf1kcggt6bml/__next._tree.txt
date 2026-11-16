@@ -1,0 +1,10 @@
+:HL["/pre-wedding-photoshoot/_next/static/chunks/0q80-n1ux7k67.css","style"]
+:HL["/pre-wedding-photoshoot/_next/static/chunks/01p-op9be90rb.css","style"]
+:HL["/pre-wedding-photoshoot/_next/static/media/01d6212a423b17a1-s.p.1pvupmngxrt5z.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pre-wedding-photoshoot/_next/static/media/6f3ab718e3727c1a-s.p.3huc2loe0ie8a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/pre-wedding-photoshoot/_next/static/media/82450a180bcad83c-s.p.0p-wng2nn8o-p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+4:[["children",{"s":"__PAGE__","h":160}]]
+3:[["children",{"s":{"n":"id","t":"d","k":"cmwhx9qsd0038kf1kcggt6bml","s":[]},"h":65632,"c":"$Q4"}]]
+2:[["children",{"s":"bookings","h":131168,"c":"$Q3"}]]
+1:[["children",{"s":"admin","h":131168,"c":"$Q2"}]]
+0:{"b":"Szib46n4JQVQeeg5oZbYj","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

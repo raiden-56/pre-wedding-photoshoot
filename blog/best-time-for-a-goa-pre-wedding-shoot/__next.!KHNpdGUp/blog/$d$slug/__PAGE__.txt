@@ -1,0 +1,34 @@
+3:"$Sreact.fragment"
+4:"/pre-wedding-photoshoot/_next/static/chunks/1xzs3lirqg3re.js"
+5:"/pre-wedding-photoshoot/_next/static/chunks/271qwnfrbbwgx.js"
+6:I[39756,["$4","$5"],"default"]
+7:I[37457,["$4","$5"],"default"]
+e:"/pre-wedding-photoshoot/_next/static/chunks/10kxqg2eapiec.js"
+f:"/pre-wedding-photoshoot/_next/static/chunks/2_aje-pqd2hm3.js"
+10:"/pre-wedding-photoshoot/_next/static/chunks/0z-69imie6i-g.js"
+11:I[22016,["$4","$5","$e","$f","$10"],""]
+12:I[5014,["$4","$5","$e","$f","$10"],"default"]
+13:I[85437,["$4","$5","$e","$f","$10"],"Image"]
+14:I[97367,["$4","$5"],"OutletBoundary"]
+15:"$Sreact.suspense"
+18:"ViewportBoundary"
+19:I[97367,["$4","$5"],"$18"]
+1a:"MetadataBoundary"
+1b:I[97367,["$4","$5"],"$1a"]
+9:X
+9:C
+a:X
+d:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$3","c",{"children":[["$","article",null,{"className":"pb-28 pt-32 sm:pt-40","children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"The best time of year for a Goa pre-wedding shoot\",\"datePublished\":\"2026-10-16T04:30:00.000Z\",\"image\":\"/photos/36.jpg\",\"description\":\"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits.\"}"}}],["$","div",null,{"className":"container-x max-w-3xl","children":[["$","$L11",null,{"href":"/blog","className":"inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted hover:text-charcoal","children":[["$","$L12",null,{"icon":{"name":"arrow-left","size":24,"node":[["path",{"d":"m12 19-7-7 7-7","key":"1l729n"}],["path",{"d":"M19 12H5","key":"x3x0zl"}]]},"className":"size-3.5"}]," Journal"]}],["$","p",null,{"className":"eyebrow mt-10","children":["Goa · Planning"," · ","16 Oct 2026"]}],["$","h1",null,{"className":"font-display mt-4 text-headline","children":"The best time of year for a Goa pre-wedding shoot"}],["$","p",null,{"className":"mt-5 text-lg text-muted","children":"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits."}]]}],["$","div",null,{"className":"container-x my-14","children":["$","div",null,{"className":"relative mx-auto aspect-[21/10] max-w-6xl overflow-hidden","children":["$","$L13",null,{"src":"/photos/36.jpg","alt":"The best time of year for a Goa pre-wedding shoot","fill":true,"priority":true,"sizes":"100vw","className":"object-cover"}]}]}],["$","div",null,{"className":"container-x max-w-3xl","children":["$","div",null,{"className":"space-y-6 text-[16px] leading-[1.85] text-ink/85","children":[["$","p","0",{"children":"Goa changes completely across the year."}],["$","h2","1",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Winter (November – February)\nClear skies, soft evening light and sunsets around 6 pm. Beaches in the south stay quiet early in the morning. This is our most booked season, so plan three to four months ahead."}],["$","h2","2",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Monsoon (June – September)\nDeep greens, dramatic clouds and empty beaches. Expect to adapt on the day; waterproof cases and a flexible schedule help."}],["$","h2","3",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Our tip\nWhatever the season, plan the last 90 minutes before sunset for your most important looks."}]]}]}]]}],[["$","script","script-0",{"src":"/pre-wedding-photoshoot/_next/static/chunks/0z-69imie6i-g.js","async":true}]],["$","$L14",null,{"children":["$","$15",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]]}],"p":"$@17","v":null,"s":"$a"}}]]
+b:[["children",{"s":{"n":"slug","t":"d","k":"best-time-for-a-goa-pre-wedding-shoot","s":[]},"h":65632,"d":{"r":["$","$3","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@c","v":"$9","s":"$a"},"c":"$Qd"}]]
+2:[["children",{"s":"blog","h":131136,"d":{"r":["$","$3","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@8","v":"$9","s":"$a"},"c":"$Qb"}]]
+1:[["children",{"s":"(site)","h":131104,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$L19",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F7F4EF"}]]}],["$","$L1b",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$15",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"The best time of year for a Goa pre-wedding shoot · Saanjh Studio"}],["$","meta","1",{"name":"description","content":"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits."}],["$","link","2",{"rel":"canonical","href":"http://localhost:3100/blog/best-time-for-a-goa-pre-wedding-shoot/"}],["$","meta","3",{"property":"og:title","content":"The best time of year for a Goa pre-wedding shoot · Saanjh Studio"}],["$","meta","4",{"property":"og:description","content":"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits."}],["$","meta","5",{"property":"og:image","content":"http://localhost:3100/photos/36.jpg"}],["$","meta","6",{"property":"og:type","content":"article"}],["$","meta","7",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","8",{"name":"twitter:title","content":"The best time of year for a Goa pre-wedding shoot · Saanjh Studio"}],["$","meta","9",{"name":"twitter:description","content":"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits."}],["$","meta","10",{"name":"twitter:image","content":"http://localhost:3100/photos/36.jpg"}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@1c","v":null,"s":"$a"}},"a":"$@1d","u":"$@1e","b":"Szib46n4JQVQeeg5oZbYj"}
+16:null
+1e:true
+a:300
+a:C
+1d:0
+c:"$undefined"
+8:"$undefined"
+1c:"$undefined"
+17:"$undefined"

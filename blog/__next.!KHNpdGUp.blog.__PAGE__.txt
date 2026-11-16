@@ -1,0 +1,31 @@
+3:"$Sreact.fragment"
+4:"/pre-wedding-photoshoot/_next/static/chunks/1xzs3lirqg3re.js"
+5:"/pre-wedding-photoshoot/_next/static/chunks/271qwnfrbbwgx.js"
+6:I[39756,["$4","$5"],"default"]
+7:I[37457,["$4","$5"],"default"]
+c:"/pre-wedding-photoshoot/_next/static/chunks/10kxqg2eapiec.js"
+d:"/pre-wedding-photoshoot/_next/static/chunks/2_aje-pqd2hm3.js"
+e:"/pre-wedding-photoshoot/_next/static/chunks/0z-69imie6i-g.js"
+f:I[22016,["$4","$5","$c","$d","$e"],""]
+10:I[85437,["$4","$5","$c","$d","$e"],"Image"]
+11:I[97367,["$4","$5"],"OutletBoundary"]
+12:"$Sreact.suspense"
+15:"ViewportBoundary"
+16:I[97367,["$4","$5"],"$15"]
+17:"MetadataBoundary"
+18:I[97367,["$4","$5"],"$17"]
+9:X
+9:C
+a:X
+b:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$3","c",{"children":[[["$","section",null,{"className":"container-x pb-16 pt-36 sm:pt-44","children":[["$","p",null,{"className":"eyebrow mb-5 animate-fade-up","children":"Journal"}],["$","h1",null,{"className":"font-display max-w-5xl animate-fade-up text-headline [animation-delay:120ms]","children":["Notes on light, love ",["$","em",null,{"children":"and planning."}]]}],"$undefined"]}],["$","section",null,{"className":"container-x pb-28","children":[["$","$Lf",null,{"href":"/blog/best-time-for-a-goa-pre-wedding-shoot","className":"group grid gap-8 border-b border-line pb-16 lg:grid-cols-12","children":[["$","div",null,{"className":"relative aspect-[16/10] overflow-hidden lg:col-span-7","children":["$","$L10",null,{"src":"/photos/36.jpg","alt":"The best time of year for a Goa pre-wedding shoot","fill":true,"sizes":"60vw","className":"object-cover transition duration-1000 group-hover:scale-105"}]}],["$","div",null,{"className":"self-center lg:col-span-4 lg:col-start-9","children":[["$","p",null,{"className":"eyebrow","children":"Goa · Planning"}],["$","h2",null,{"className":"font-display mt-4 text-5xl leading-none","children":"The best time of year for a Goa pre-wedding shoot"}],["$","p",null,{"className":"mt-4 text-[15px] leading-relaxed text-muted","children":"Monsoon greens or winter gold? How the seasons change the light, the crowds and your outfits."}],["$","p",null,{"className":"mt-5 text-xs uppercase tracking-[0.2em] text-taupe","children":"16 Oct 2026"}]]}]]}],["$","div",null,{"className":"mt-16 grid gap-12 md:grid-cols-2","children":[["$","$Lf","cmwhx9qrl0028kf1kkpknj9wm",{"href":"/blog/what-to-wear-for-your-pre-wedding-shoot","className":"group","children":[["$","div",null,{"className":"relative aspect-[16/10] overflow-hidden","children":["$","$L10",null,{"src":"/photos/26.jpg","alt":"What to wear for your pre-wedding shoot","fill":true,"sizes":"50vw","className":"object-cover transition duration-1000 group-hover:scale-105"}]}],["$","p",null,{"className":"eyebrow mt-5","children":"Styling"}],["$","h2",null,{"className":"font-display mt-2 text-3xl","children":"What to wear for your pre-wedding shoot"}],["$","p",null,{"className":"mt-2 text-sm text-muted","children":"Colour palettes that photograph beautifully, and the fabrics that move with the wind."}]]}],["$","$Lf","cmwhx9qrm0029kf1k8nm62fxb",{"href":"/blog/how-our-private-galleries-work","className":"group","children":[["$","div",null,{"className":"relative aspect-[16/10] overflow-hidden","children":["$","$L10",null,{"src":"/photos/08.jpg","alt":"How our private galleries work","fill":true,"sizes":"50vw","className":"object-cover transition duration-1000 group-hover:scale-105"}]}],["$","p",null,{"className":"eyebrow mt-5","children":"Galleries"}],["$","h2",null,{"className":"font-display mt-2 text-3xl","children":"How our private galleries work"}],["$","p",null,{"className":"mt-2 text-sm text-muted","children":"Favourites, comments, album selections, family sharing and secure downloads — a tour."}]]}]]}],false]}]],[["$","script","script-0",{"src":"/pre-wedding-photoshoot/_next/static/chunks/0z-69imie6i-g.js","async":true}]],["$","$L11",null,{"children":["$","$12",null,{"name":"Next.MetadataOutlet","children":"$@13"}]}]]}],"p":"$@14","v":null,"s":"$a"}}]]
+2:[["children",{"s":"blog","h":64,"d":{"r":["$","$3","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@8","v":"$9","s":"$a"},"c":"$Qb"}]]
+1:[["children",{"s":"(site)","h":32,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":80,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$L16",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F7F4EF"}]]}],["$","$L18",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$12",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Journal — Planning Guides & Behind the Scenes · Saanjh Studio"}],["$","meta","1",{"name":"description","content":"Pre-wedding planning tips, location guides and how our private galleries work."}],["$","link","2",{"rel":"canonical","href":"http://localhost:3100/blog/"}],["$","meta","3",{"property":"og:title","content":"Journal — Planning Guides & Behind the Scenes · Saanjh Studio"}],["$","meta","4",{"property":"og:description","content":"Pre-wedding planning tips, location guides and how our private galleries work."}],["$","meta","5",{"property":"og:site_name","content":"Saanjh Studio"}],["$","meta","6",{"property":"og:image","content":"http://localhost:3100/photos/32.jpg"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"Journal — Planning Guides & Behind the Scenes · Saanjh Studio"}],["$","meta","10",{"name":"twitter:description","content":"Pre-wedding planning tips, location guides and how our private galleries work."}],["$","meta","11",{"name":"twitter:image","content":"http://localhost:3100/photos/32.jpg"}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@19","v":null,"s":"$a"}},"a":"$@1a","u":"$@1b","b":"Szib46n4JQVQeeg5oZbYj"}
+13:null
+1b:true
+a:300
+a:C
+1a:0
+8:"$undefined"
+19:"$undefined"
+14:"$undefined"

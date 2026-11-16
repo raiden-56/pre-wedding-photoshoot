@@ -1,0 +1,26 @@
+3:"$Sreact.fragment"
+4:"/pre-wedding-photoshoot/_next/static/chunks/1xzs3lirqg3re.js"
+5:"/pre-wedding-photoshoot/_next/static/chunks/271qwnfrbbwgx.js"
+6:I[39756,["$4","$5"],"default"]
+7:I[37457,["$4","$5"],"default"]
+c:I[97367,["$4","$5"],"OutletBoundary"]
+d:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$4","$5"],"$10"]
+12:"MetadataBoundary"
+13:I[97367,["$4","$5"],"$12"]
+9:X
+9:C
+a:X
+b:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$3","c",{"children":[[["$","section",null,{"className":"container-x pb-16 pt-36 sm:pt-44","children":[["$","p",null,{"className":"eyebrow mb-5 animate-fade-up","children":"Legal"}],["$","h1",null,{"className":"font-display max-w-5xl animate-fade-up text-headline [animation-delay:120ms]","children":"Privacy Policy"}],"$undefined"]}],["$","section",null,{"className":"container-x max-w-3xl pb-28","children":["$","div",null,{"className":"space-y-6 text-[16px] leading-[1.85] text-ink/85","children":[["$","p","0",{"children":"This template policy describes how the platform handles personal data. Review it with your legal adviser before publishing."}],["$","h2","1",{"className":"font-display pt-4 text-3xl text-charcoal","children":"What we collect\nContact details you send through our inquiry form (name, email, phone, partner's name and event details), account details for couples and family members who access private galleries, and the photographs and videos we create for you."}],["$","h2","2",{"className":"font-display pt-4 text-3xl text-charcoal","children":"How we use it\nTo reply to inquiries, deliver and manage your bookings, provide private galleries, process payments and send the notifications you have opted into."}],["$","h2","3",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Private galleries\nGalleries are private by default and are never indexed by search engines. Photographs are served through short-lived signed links. Original files are stored in private storage and are never exposed through public, guessable URLs. Couples control who is invited and can revoke access at any time."}],["$","h2","4",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Retention\nGalleries stay available for the period agreed in your collection, then are archived. We never permanently delete client photographs without an explicit, authorised request."}],["$","h2","5",{"className":"font-display pt-4 text-3xl text-charcoal","children":"Your rights\nYou may request a copy of your data, ask us to correct it, or ask us to delete it, subject to our legal obligations. Contact us using the details on this website."}]]}]}]],[["$","script","script-0",{"src":"/pre-wedding-photoshoot/_next/static/chunks/0z-69imie6i-g.js","async":true}]],["$","$Lc",null,{"children":["$","$d",null,{"name":"Next.MetadataOutlet","children":"$@e"}]}]]}],"p":"$@f","v":null,"s":"$a"}}]]
+2:[["children",{"s":"privacy","h":64,"d":{"r":["$","$3","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@8","v":"$9","s":"$a"},"c":"$Qb"}]]
+1:[["children",{"s":"(site)","h":32,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":80,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$L11",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F7F4EF"}]]}],["$","$L13",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$d",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Privacy Policy · Saanjh Studio"}],["$","meta","1",{"name":"description","content":"Editorial pre-wedding and wedding photography across India — Goa, Udaipur, Jaipur, Kerala, Coorg and the mountains. Private digital galleries for every couple."}],["$","link","2",{"rel":"canonical","href":"http://localhost:3100/privacy/"}],["$","meta","3",{"property":"og:title","content":"Privacy Policy · Saanjh Studio"}],["$","meta","4",{"property":"og:description","content":"Editorial pre-wedding and wedding photography across India — Goa, Udaipur, Jaipur, Kerala, Coorg and the mountains. Private digital galleries for every couple."}],["$","meta","5",{"property":"og:site_name","content":"Saanjh Studio"}],["$","meta","6",{"property":"og:image","content":"http://localhost:3100/photos/32.jpg"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"Privacy Policy · Saanjh Studio"}],["$","meta","10",{"name":"twitter:description","content":"Editorial pre-wedding and wedding photography across India — Goa, Udaipur, Jaipur, Kerala, Coorg and the mountains. Private digital galleries for every couple."}],["$","meta","11",{"name":"twitter:image","content":"http://localhost:3100/photos/32.jpg"}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@14","v":null,"s":"$a"}},"a":"$@15","u":"$@16","b":"Szib46n4JQVQeeg5oZbYj"}
+e:null
+16:true
+a:300
+a:C
+15:0
+8:"$undefined"
+14:"$undefined"
+f:"$undefined"
